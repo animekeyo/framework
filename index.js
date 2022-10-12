@@ -138,3 +138,16 @@ function text(val) {
     }
 
 }
+
+////////////////////////////////////
+////////////////////////////////////
+$(document).on('click', function(e) {
+    if ($(e.target).closest("menu").length === 0 &&
+        $(e.target).closest('[menu]').attr('menu') &&
+        $(e.target).closest('[menu]').attr('menu').length > 1) {
+        const id = $(e.target).closest('[menu]').attr('menu');
+        $(`menu[id="${id}"]`).fadeToggle(0100)
+    } else if ($(e.target).closest("menu").length === 0) {
+        $("menu").fadeOut(0100);
+    }
+});
