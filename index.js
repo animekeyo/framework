@@ -55,6 +55,9 @@ async function element(value) {
             delete value.cookie;
             value.fetch = await fetchQuery(value);
             return await replaceQuery(value);
+        } else if (value && value.query && value.name && value.fetch) {
+            value.fetch = value.cookie;
+            return await replaceQuery(value);
         } else if (value && value.query && value.name) {
             value.fetch = await fetchQuery(value);
             return await replaceQuery(value);
