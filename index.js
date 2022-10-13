@@ -70,6 +70,31 @@ async function element(value) {
         console.error(error)
     }
 }
+///////////////////////////////////////
+async function elementFetch() {
+    var data1 = await fetch('/version.json?clear=' + Date.now()).then(o => o.json());
+    var update_version = geti('update_version');
+    var fetchList = {};
+    if (data1 && update_version && data1.version === Number(update_version)) {
+        for await (const name of data1.defaultList) {
+            const cookieName = `cookie-${name}`;
+            const key = name.replace('-', '_').replace('/', '_')
+            const fetchData = geti(cookieName);
+            fetchList[key] = fetchData
+        }
+    } else {
+        for await (const name of data1.defaultList) {
+            const cookieName = `cookie-${name}`;
+            const key = name.replace('-', '_').replace('/', '_')
+            const valueFetch = '/theme/' + name + '.html?clear=' + Date.now();
+            const fetchData = await fetch(valueFetch).then(o => o.text());
+            fetchList[key] = seti(cookieName, fetchData);
+        }
+        await setii('update_version', data1.version)
+    }
+    return fetchList;
+}
+
 ///////////////////////////////
 function seti(location, data) {
     localStorage.setItem(location, data)
